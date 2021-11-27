@@ -71,5 +71,16 @@ SETTINGS = {
                 },
             },
         },
+        "discounts": {
+            "authentication": JWTTokenAuth,
+            "url": 'consumers/<regex("[a-f0-9]{24}"):consumer_id>/discounts',
+            "resource_methods": ["POST"],
+            "public_methods": [],
+            "schema": {
+                "promotion_id": {
+                    "type": "string",
+                },
+            },
+        },
     },
 }
