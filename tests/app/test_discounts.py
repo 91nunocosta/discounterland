@@ -125,3 +125,22 @@ def test_add_discount_for_non_existing_promotion(db, client, token, user):
     )
 
     assert response.status_code == 422
+
+
+def test_add_discount_for_expired_promotion(db, client, token, user, expired_promotion):
+    promotion_id = str(expired_promotion["_id"])
+    consumer_id = user["_id"]
+
+    discount = {
+        "promotion_id": promotion_id,
+    }
+
+    response = client.post(
+        f"/consumers/{consumer_id}/discounts",
+        json=discount,
+        headers={"authorization": token},
+    )
+
+    assert response.status_code == 422
+
+

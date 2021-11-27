@@ -1,6 +1,8 @@
 import json
+import dateutil.parser
 import random
 import string
+import datetime
 from bson import ObjectId
 from flask import current_app, abort
 
@@ -20,10 +22,17 @@ def check_promotion(items):
     for item in items:
         promotion_id = item["promotion_id"]
 
-        result = _get_promotion(promotion_id)
+        promotion = _get_promotion(promotion_id)
 
-        if result is None:
+        if promotion is None:
             abort(422)
+
+        expiration_date = dateutil.parser.parse(promotion["expiration_date"])
+
+        now = datetime.datetime.now().replace(tzinfo=expiration_date.tzinfo)
+
+        if expiration_date < now:
+            return abort(422)
 
 
 def _char() -> str:
