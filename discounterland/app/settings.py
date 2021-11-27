@@ -29,5 +29,15 @@ SETTINGS = {
                 },
             },
         },
+        "brands": {
+            "resource_methods": [],
+            "public_methods": [],
+            "schema": {},
+        },
+        "consumers": {
+            "resource_methods": [],
+            "public_methods": [],
+            "schema": {},
+        },
     },
 }
