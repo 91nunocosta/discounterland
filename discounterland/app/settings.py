@@ -72,6 +72,7 @@ SETTINGS = {
                 },
                 "discounts_quantity": {
                     "type": "integer",
+                    "min": 1,
                 },
             },
         },

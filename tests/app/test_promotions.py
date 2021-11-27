@@ -161,3 +161,39 @@ def test_add_promotion_with_past_expiration_date(db, client, token, user):
     assert response.status_code == 422
 
 
+def test_add_promotion_with_non_positive_discount_quantity(db, client, token, user):
+    db.promotions.drop()
+
+    user_id = user["_id"]
+
+    brand_id = "61a22c8f43cf71b9933afdd7"
+
+    db.brands.insert_one({"_id": brand_id})
+
+    # user needs to be one of the brand's manager
+    db.brand_managers.insert_one({
+        "brand_id": ObjectId(brand_id),
+        "account_id": user_id,
+    })
+
+    datestring = _serialize_date(datetime.datetime.now() + datetime.timedelta(days=1))
+
+    promotion = {
+        "expiration_date": datestring,
+        "product": {
+            "name": "Nutella",
+            "images": [
+                "https://images.jumpseller.com/store/hercules-it-llc/10188702/"
+                "Nutella.jpg"
+            ],
+        },
+        "discounts_quantity": 0,
+    }
+
+    response = client.post(
+        f"/brands/{brand_id}/promotions",
+        json=promotion,
+        headers={"Authorization": token},
+    )
+
+    assert response.status_code == 422
