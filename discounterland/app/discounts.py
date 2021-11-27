@@ -1,10 +1,15 @@
 import json
-import dateutil.parser
 import random
 import string
 import datetime
 from bson import ObjectId
 from flask import current_app, abort
+
+from discounterland.app.settings import SETTINGS
+
+
+def _serialize_date(date):
+    return date.strftime(SETTINGS["DATE_FORMAT"])
 
 
 def _get_db():
@@ -27,7 +32,7 @@ def check_promotion(items):
         if promotion is None:
             abort(422)
 
-        expiration_date = dateutil.parser.parse(promotion["expiration_date"])
+        expiration_date = promotion["expiration_date"]
 
         now = datetime.datetime.now().replace(tzinfo=expiration_date.tzinfo)
 
@@ -67,6 +72,9 @@ def add_promotion_details(request, payload):
     promotion = _get_promotion(promotion_id)
 
     promotion["_id"] = str(promotion["_id"])
+    promotion["expiration_date"] = _serialize_date(promotion["expiration_date"])
+
+    print(promotion)
 
     body["expiration_date"] = promotion["expiration_date"]
     body["promotion"] = promotion

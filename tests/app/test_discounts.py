@@ -1,5 +1,6 @@
 import re
 from tests.app.helpers import items_without_meta
+from discounterland.app.discounts import _serialize_date
 
 
 WORD = "[0-9A-Z]{4,4}"
@@ -30,6 +31,7 @@ def test_add_discount(db, client, token, user, promotion):
     assert set(response_body) == {"promotion", "code", "expiration_date"}
 
     promotion["_id"] = str(promotion["_id"])
+    promotion["expiration_date"] = _serialize_date(promotion["expiration_date"])
 
     assert response_body["promotion"] == promotion
 

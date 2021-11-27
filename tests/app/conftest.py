@@ -42,8 +42,7 @@ def promotion(db):
         {
           "id": "/promotions/20211fcf-0116-4217-9816-be11a4954344",
           "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
-          "creation_date": "2021-11-25T16:51:02.003Z",
-          "expiration_date": datetime.datetime.now() + datetime.timedelta(years=2),
+          "expiration_date": datetime.datetime.now() + datetime.timedelta(days=365),
           "product": {
             "name": "Nutella",
             "images": [
@@ -63,8 +62,7 @@ def expired_promotion(db):
         {
           "id": "/promotions/20211fcf-0116-4217-9816-be11a4954344",
           "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
-          "creation_date": "2020-11-25T16:51:02.003Z",
-          "expiration_date": "2020-11-25T16:51:02.003Z",
+          "expiration_date": datetime.datetime(2020, 11, 25, 16),
           "product": {
             "name": "Nutella",
             "images": [
