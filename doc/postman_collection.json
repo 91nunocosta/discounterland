@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "39b3f771-8a5b-4ca7-b907-2de80f7d0d9e",
+		"name": "Discounterland",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create promotion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"expiration_date\": \"2022-11-25T16:51:02.003Z\",\n  \"product\": {\n    \"name\": \"Nutella\",\n    \"images\": [\n      \"https://images.jumpseller.com/store/hercules-it-llc/10188702/Nutella.jpg?1623999446\"\n    ]\n  },\n  \"discounts_quantity\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/brands/61a22c8f43cf71b9933afdd7/promotions",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"brands",
+						"61a22c8f43cf71b9933afdd7",
+						"promotions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create discount",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MTI5ODM0OTg5IiwibmFtZSI6IlBhdHJpY2siLCJpYXQiOjE1MTYyMzkwMjJ9.UNxtO1rOKdkMawosiKiaQ3yupcKZWAvev1N0Lb49m28",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"promotion_id\": \"/promotions/9e169116-e3de-41cc-952a-149ed1cc4b40\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/consumers/61a22cb797321cee10c8df49/discounts",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"consumers",
+						"61a22cb797321cee10c8df49",
+						"discounts"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:5000"
+		}
+	]
+}

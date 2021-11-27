@@ -1,0 +1,351 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Discounterland",
+    "description": "API for a marketplace with brand pages promoting discounts\n",
+    "contact": {
+      "email": "91nunocosta@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/nunocosta2/Discounterland/0.1.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "paths": {
+    "/brands/{id}/promotions": {
+      "post": {
+        "summary": "Create a new promotion",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "brand identifier, as BrandId",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "$ref": "#/components/schemas/BrandId"
+            },
+            "example": "745ba01d-51a1-4615-9571-ee14d15bb4af"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/id_promotions_body"
+              },
+              "examples": {
+                "promotion": {
+                  "summary": "a promotion",
+                  "value": {
+                    "expiration_date": "2022-11-25T16:51:02.003Z",
+                    "product": {
+                      "name": "Nutella",
+                      "images": [
+                        "https://images.jumpseller.com/store/hercules-it-llc/10188702/Nutella.jpg?1623999446"
+                      ]
+                    },
+                    "discounts_quantity": 10
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "promotion created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Promotion"
+                },
+                "examples": {
+                  "promotion": {
+                    "$ref": "#/components/examples/promotion"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "403": {
+            "description": "Access token is not authorized to create promotions for this brand"
+          },
+          "404": {
+            "description": "Brand not found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/consumers/{id}/discounts": {
+      "post": {
+        "summary": "Create a discount for a given promotion",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "the consuemr identifier, as ConsumerId",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "$ref": "#/components/schemas/ConsumerId"
+            },
+            "example": "3921fb26-5908-4a57-86a6-89cc515124b9"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/id_discounts_body"
+              },
+              "example": {
+                "promotion_id": "/promotions/9e169116-e3de-41cc-952a-149ed1cc4b40"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "discount created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Discount"
+                },
+                "examples": {
+                  "discount": {
+                    "$ref": "#/components/examples/discount"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "403": {
+            "description": "Access token is not authorized to create a discount for this consumer"
+          },
+          "404": {
+            "description": "Consumer not found"
+          },
+          "422": {
+            "description": "The promotion does not exists or already expired."
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "url"
+            }
+          }
+        }
+      },
+      "Promotion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/PromotionId"
+          },
+          "brand_id": {
+            "$ref": "#/components/schemas/BrandId"
+          },
+          "creation_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "discounts_quantity": {
+            "type": "integer"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          }
+        }
+      },
+      "Discount": {
+        "type": "object",
+        "properties": {
+          "consumer_id": {
+            "type": "string",
+            "format": "url"
+          },
+          "promotion": {
+            "$ref": "#/components/schemas/Promotion"
+          },
+          "code": {
+            "type": "string"
+          },
+          "creation_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PromotionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "BrandId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ConsumerId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "id_promotions_body": {
+        "type": "object",
+        "properties": {
+          "expiration_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "discounts_quantity": {
+            "type": "integer"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          }
+        }
+      },
+      "id_discounts_body": {
+        "type": "object",
+        "properties": {
+          "promotion_id": {
+            "$ref": "#/components/schemas/PromotionId"
+          }
+        }
+      }
+    },
+    "responses": {
+      "brandNotFound": {
+        "description": "Brand not found"
+      },
+      "promotionNotFound": {
+        "description": "Promotion not found"
+      },
+      "consumerNotFound": {
+        "description": "Consumer not found"
+      },
+      "notAuthenticated": {
+        "description": "Not authenticated"
+      }
+    },
+    "parameters": {
+      "brandId": {
+        "name": "id",
+        "in": "path",
+        "description": "brand identifier, as BrandId",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "$ref": "#/components/schemas/BrandId"
+        },
+        "example": "745ba01d-51a1-4615-9571-ee14d15bb4af"
+      },
+      "consumerId": {
+        "name": "id",
+        "in": "path",
+        "description": "the consuemr identifier, as ConsumerId",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "$ref": "#/components/schemas/ConsumerId"
+        },
+        "example": "3921fb26-5908-4a57-86a6-89cc515124b9"
+      }
+    },
+    "examples": {
+      "promotion": {
+        "summary": "a promotion",
+        "value": {
+          "id": "/promotions/20211fcf-0116-4217-9816-be11a4954344",
+          "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
+          "creation_date": "2021-11-25T16:51:02.003Z",
+          "expiration_date": "2022-11-25T16:51:02.003Z",
+          "product": {
+            "name": "Nutella",
+            "images": [
+              "https://images.jumpseller.com/store/hercules-it-llc/10188702/Nutella.jpg?1623999446"
+            ]
+          },
+          "discounts_quantity": 10
+        }
+      },
+      "discount": {
+        "summary": "a discount",
+        "value": {
+          "cosumer_id": "/consumers/3921fb26-5908-4a57-86a6-89cc515124b9",
+          "promotion": {
+            "id": "/promotions/9e169116-e3de-41cc-952a-149ed1cc4b40",
+            "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
+            "creation_date": "2021-11-25T16:51:02.003Z",
+            "expiration_date": "2022-11-25T16:51:02.003Z",
+            "product": {
+              "name": "Nutella",
+              "images": [
+                "https://images.jumpseller.com/store/hercules-it-llc/10188702/Nutella.jpg?1623999446"
+              ],
+              "discounts_quantity": 10
+            }
+          },
+          "code": "IQ24-EUZP-IUGY-935R",
+          "creation_date": "2021-12-12T20:31:05.003Z",
+          "expiration_date": "2022-11-25T16:51:02.003Z"
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
