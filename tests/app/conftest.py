@@ -22,8 +22,17 @@ def db(app):
 
 
 @pytest.fixture
-def user():
-    return "91nunocosta@gmail.com"
+def user(db):
+    username = "91nunocosta@gmail.com"
+
+    db.accounts.insert_one(
+        {
+            "username": username,
+            "password": "insecurepassword",
+        }
+    )
+
+    return username
 
 
 @pytest.fixture
