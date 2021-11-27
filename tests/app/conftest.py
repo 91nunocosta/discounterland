@@ -18,21 +18,21 @@ def client(app):
 @pytest.fixture
 def db(app):
     with app.app_context():
-        return app.data.driver.db
+        db = app.data.driver.db
+        db.command("dropDatabase")
+        return db
 
 
 @pytest.fixture
 def user(db):
-    username = "91nunocosta@gmail.com"
-
-    db.accounts.insert_one(
+    _id = db.accounts.insert_one(
         {
-            "username": username,
+            "username": "91nunocosta@gmail.com",
             "password": "insecurepassword",
         }
-    )
+    ).inserted_id
 
-    return username
+    return db.accounts.find_one({"_id": _id})
 
 
 @pytest.fixture
@@ -49,15 +49,18 @@ def token(user):
 
     # a patch for mocking the check_token function is started before the test
     # it is finished when the test stops
-    token_payload = {"sub": user}
+    token_payload = {"sub": user["username"]}
 
-    patcher = patch("discounterland.app.auth.check_token", lambda _: token_payload)
+    patcher1 = patch("discounterland.app.auth.check_token", lambda _: token_payload)
+    patcher2 = patch("discounterland.app.consumers.check_token", lambda _: token_payload)
 
-    patcher.start()
+    patcher1.start()
+    patcher2.start()
 
     yield token_payload
 
-    patcher.stop()
+    patcher1.stop()
+    patcher2.stop()
 
 
 @pytest.fixture

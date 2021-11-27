@@ -1,6 +1,7 @@
 import os
 
 from discounterland.app.auth import JWTTokenAuth
+from discounterland.app.consumers import ConsumerJWTTokenAuth
 
 SETTINGS = {
     "SERVER_NAME": os.environ.get("SERVER_NAME", "0.0.0.0:5000"),
@@ -72,7 +73,7 @@ SETTINGS = {
             },
         },
         "discounts": {
-            "authentication": JWTTokenAuth,
+            "authentication": ConsumerJWTTokenAuth,
             "url": 'consumers/<regex("[a-f0-9]{24}"):consumer_id>/discounts',
             "resource_methods": ["POST"],
             "public_methods": [],
