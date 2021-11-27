@@ -36,6 +36,13 @@ def user(db):
 
 
 @pytest.fixture
+def promotion(db):
+    _id = db.promotions.insert_one({}).inserted_id
+
+    return db.promotions.find_one({"_id": _id})
+
+
+@pytest.fixture
 def another_user():
     return "william.dev@example.com"
 

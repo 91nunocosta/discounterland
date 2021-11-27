@@ -1,10 +1,8 @@
 from tests.app.helpers import items_without_meta
 
 
-def test_add_discount(db, client, token, user):
-    db.discounts.drop()
-
-    promotion_id = "61a22c8f43cf71b9933afdd7"
+def test_add_discount(db, client, token, user, promotion):
+    promotion_id = str(promotion["_id"])
     consumer_id = user["_id"]
 
     discount = {
@@ -28,10 +26,10 @@ def test_add_discount(db, client, token, user):
     )
 
 
-def test_add_discount_for_non_authenticated_user(db, client):
+def test_add_discount_for_non_authenticated_user(db, client, promotion):
     db.discounts.drop()
 
-    promotion_id = "61a22c8f43cf71b9933afdd7"
+    promotion_id = str(promotion["_id"])
     consumer_id = "61a22cb797321cee10c8df49"
 
     discount = {
@@ -46,7 +44,7 @@ def test_add_discount_for_non_authenticated_user(db, client):
     assert response.status_code == 401
 
 
-def test_add_discount_for_unauthorized_user(db, client, token):
+def test_add_discount_for_unauthorized_user(db, client, token, promotion):
     db.discounts.drop()
 
     consumer_id = db.accounts.insert_one({
@@ -54,7 +52,7 @@ def test_add_discount_for_unauthorized_user(db, client, token):
         "password": "insecurepass",
     }).inserted_id
 
-    promotion_id = "61a22c8f43cf71b9933afdd7"
+    promotion_id = str(promotion["_id"])
 
     discount = {
         "promotion_id": promotion_id,
@@ -69,10 +67,11 @@ def test_add_discount_for_unauthorized_user(db, client, token):
     assert response.status_code == 401
 
 
-def test_add_discount_for_non_existing_consumer(db, client, token):
+def test_add_discount_for_non_existing_consumer(db, client, token, promotion):
     db.discounts.drop()
 
-    promotion_id = "61a22c8f43cf71b9933afdd7"
+    promotion_id = str(promotion["_id"])
+
     consumer_id = "61a28cbb7cc480477ff9ea88"
 
     discount = {
@@ -86,3 +85,22 @@ def test_add_discount_for_non_existing_consumer(db, client, token):
     )
 
     assert response.status_code == 401
+
+
+def test_add_discount_for_non_existing_promotion(db, client, token, user):
+    db.discounts.drop()
+
+    promotion_id = "61a29601629ceafe6030c511"
+    consumer_id = user["_id"]
+
+    discount = {
+        "promotion_id": promotion_id,
+    }
+
+    response = client.post(
+        f"/consumers/{consumer_id}/discounts",
+        json=discount,
+        headers={"authorization": token},
+    )
+
+    assert response.status_code == 422
