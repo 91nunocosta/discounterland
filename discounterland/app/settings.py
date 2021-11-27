@@ -56,6 +56,7 @@ SETTINGS = {
                 },
                 "expiration_date": {
                     "type": "datetime",
+                    "isfuture": True,
                 },
                 "product": {
                     "type": "dict",

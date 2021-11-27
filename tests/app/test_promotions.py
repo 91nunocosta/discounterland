@@ -1,7 +1,10 @@
 from dateutil.parser import parse
+import datetime
 from bson import ObjectId
 
 from tests.app.helpers import items_without_meta
+
+from discounterland.app.discounts import _serialize_date
 
 
 def test_add_promotion(db, client, token, user):
@@ -19,8 +22,8 @@ def test_add_promotion(db, client, token, user):
         "account_id": user_id,
     })
 
-    datestring = "2022-11-25T16:51:02.003Z"
-    date = parse(datestring).replace(tzinfo=None)
+    datestring = _serialize_date(datetime.datetime.now() + datetime.timedelta(days=1))
+    date = parse(datestring).replace(tzinfo=None).replace(microsecond=0)
 
     promotion = {
         "expiration_date": datestring,
@@ -56,7 +59,7 @@ def test_add_promotion(db, client, token, user):
 
     added_promotion["expiration_date"] = added_promotion["expiration_date"].replace(
         tzinfo=None
-    )
+    ).replace(microsecond=0)
 
     print(added_promotion)
 
@@ -118,3 +121,43 @@ def test_add_promotion_with_non_authorized_user(db, client, token):
     )
 
     assert response.status_code == 401
+
+
+def test_add_promotion_with_past_expiration_date(db, client, token, user):
+    db.promotions.drop()
+
+    user_id = user["_id"]
+
+    brand_id = "61a22c8f43cf71b9933afdd7"
+
+    db.brands.insert_one({"_id": brand_id})
+
+    # user needs to be one of the brand's manager
+    db.brand_managers.insert_one({
+        "brand_id": ObjectId(brand_id),
+        "account_id": user_id,
+    })
+
+    datestring = "2020-11-25T16:51:02.003Z"
+
+    promotion = {
+        "expiration_date": datestring,
+        "product": {
+            "name": "Nutella",
+            "images": [
+                "https://images.jumpseller.com/store/hercules-it-llc/10188702/"
+                "Nutella.jpg"
+            ],
+        },
+        "discounts_quantity": 10,
+    }
+
+    response = client.post(
+        f"/brands/{brand_id}/promotions",
+        json=promotion,
+        headers={"Authorization": token},
+    )
+
+    assert response.status_code == 422
+
+
