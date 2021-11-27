@@ -1,3 +1,4 @@
+import re
 from tests.app.helpers import items_without_meta
 
 
@@ -9,8 +10,6 @@ def test_add_discount(db, client, token, user, promotion):
         "promotion_id": promotion_id,
     }
 
-    expected_response = dict(discount)
-
     response = client.post(
         f"/consumers/{consumer_id}/discounts",
         json=discount,
@@ -21,9 +20,14 @@ def test_add_discount(db, client, token, user, promotion):
 
     added_discount = dict(db.discounts.find_one())
 
-    assert items_without_meta([added_discount]) == items_without_meta(
-        [expected_response]
-    )
+    assert (set(items_without_meta([added_discount])[0].keys())
+            == {"promotion_id", "code"})
+
+    assert added_discount["promotion_id"] == promotion_id 
+
+    WORD = "[0-9A-Z]{4,4}"
+
+    assert re.fullmatch(f"{WORD}-{WORD}-{WORD}-{WORD}", added_discount["code"])
 
 
 def test_add_discount_for_non_authenticated_user(db, client, promotion):
