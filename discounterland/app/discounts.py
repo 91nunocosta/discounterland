@@ -39,6 +39,11 @@ def check_promotion(items):
         if expiration_date < now:
             return abort(422)
 
+        discounts_count = _get_db().discounts.count({"promotion_id": promotion_id})
+
+        if discounts_count >= promotion["discounts_quantity"]:
+            return abort(422)
+
 
 def _char() -> str:
     return random.choice(string.ascii_uppercase + string.digits)
