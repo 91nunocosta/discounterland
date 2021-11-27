@@ -1,7 +1,7 @@
 from eve import Eve
 
 from discounterland import __version__
-from discounterland.app.auth import JWTTokenAuth, login, replace_password_with_hash
+from discounterland.app.auth import login, replace_password_with_hash
 from discounterland.app.settings import SETTINGS
 
 
@@ -10,7 +10,7 @@ def create_app():
 
     swagger = get_swagger_blueprint()
 
-    app = Eve(auth=JWTTokenAuth, settings=SETTINGS)
+    app = Eve(settings=SETTINGS)
 
     app.on_insert_accounts += replace_password_with_hash
     app.add_url_rule("/login", view_func=login, methods=["POST"])

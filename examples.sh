@@ -1,8 +1,8 @@
 #!/bin/bash
 
 printf "\n\n Create discount\n"
-curl --location --request POST 'http://localhost:5000/brands/61a22c8f43cf71b9933afdd7/promotions' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c' \
+curl --location --request POST 'http://0.0.0.0:5000/brands/61a22c8f43cf71b9933afdd7/promotions' \
+--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "expiration_date": "2022-11-25T16:51:02.003Z",
@@ -16,7 +16,7 @@ curl --location --request POST 'http://localhost:5000/brands/61a22c8f43cf71b9933
 }'
 
 printf "\n\n Create a promotion \n"
-curl --location --request POST 'http://localhost:5000/consumers/61a22cb797321cee10c8df49/discounts' \
+curl --location --request POST 'http://0.0.0.0:5000/consumers/61a22cb797321cee10c8df49/discounts' \
 --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MTI5ODM0OTg5IiwibmFtZSI6IlBhdHJpY2siLCJpYXQiOjE1MTYyMzkwMjJ9.UNxtO1rOKdkMawosiKiaQ3yupcKZWAvev1N0Lb49m28' \
 --header 'Content-Type: application/json' \
 --data-raw '{

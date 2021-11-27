@@ -1,5 +1,7 @@
 import os
 
+from discounterland.app.auth import JWTTokenAuth
+
 SETTINGS = {
     "SERVER_NAME": os.environ.get("SERVER_NAME", "0.0.0.0:5000"),
     "MONGO_HOST": os.environ.get("MONGO_HOST", "localhost"),
@@ -41,6 +43,7 @@ SETTINGS = {
             "schema": {},
         },
         "promotions": {
+            "authentication": JWTTokenAuth,
             "url": 'brands/<regex("[a-f0-9]{24}"):brand_id>/promotions',
             "resource_methods": ["POST"],
             "public_methods": [],
