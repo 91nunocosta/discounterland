@@ -1,7 +1,6 @@
 db = new Mongo().getDB("eve");
 db.accounts.insert(
   {
-      "_id": ObjectId(""),
       "username": "91nunocosta@gmail.com",
       "password": "unsercurepassword"
   });
