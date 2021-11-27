@@ -3,7 +3,7 @@ import random
 import string
 import datetime
 from bson import ObjectId
-from flask import current_app, abort
+from flask import current_app, abort, request
 
 from discounterland.app.settings import SETTINGS
 
@@ -43,6 +43,14 @@ def check_promotion(items):
 
         if discounts_count >= promotion["discounts_quantity"]:
             return abort(422)
+
+
+def add_consumer_id(items):
+    for item in items:
+        
+        consumer_id = ObjectId(request.path.rsplit("/")[2])
+        
+        item["consumer_id"] = consumer_id
 
 
 def _char() -> str:

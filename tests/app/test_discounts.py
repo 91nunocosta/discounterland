@@ -42,9 +42,11 @@ def test_add_discount(db, client, token, user, promotion):
     added_discount = dict(db.discounts.find_one())
 
     assert (set(items_without_meta([added_discount])[0].keys())
-            == {"promotion_id", "code"})
+            == {"promotion_id", "code", "consumer_id"})
 
     assert added_discount["promotion_id"] == promotion_id 
+
+    assert added_discount.get("consumer_id") == consumer_id
 
     assert re.fullmatch(f"{WORD}-{WORD}-{WORD}-{WORD}", added_discount["code"])
 
