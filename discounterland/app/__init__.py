@@ -4,7 +4,7 @@ from discounterland import __version__
 from discounterland.app.auth import login, replace_password_with_hash
 from discounterland.app.settings import SETTINGS
 
-from discounterland.app.discounts import check_promotion, add_code
+from discounterland.app.discounts import check_promotion, add_code, add_promotion_details
 
 
 def create_app():
@@ -29,5 +29,6 @@ def create_app():
 
     app.on_insert_discounts += check_promotion
     app.on_insert_discounts += add_code
+    app.on_post_POST_discounts += add_promotion_details
 
     return app

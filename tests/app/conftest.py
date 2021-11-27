@@ -37,7 +37,21 @@ def user(db):
 
 @pytest.fixture
 def promotion(db):
-    _id = db.promotions.insert_one({}).inserted_id
+    _id = db.promotions.insert_one(
+        {
+          "id": "/promotions/20211fcf-0116-4217-9816-be11a4954344",
+          "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
+          "creation_date": "2021-11-25T16:51:02.003Z",
+          "expiration_date": "2022-11-25T16:51:02.003Z",
+          "product": {
+            "name": "Nutella",
+            "images": [
+              "https://images.jumpseller.com/store/hercules-it-llc/10188702/Nutella.jpg"
+            ]
+          },
+          "discounts_quantity": 10
+        }
+    ).inserted_id
 
     return db.promotions.find_one({"_id": _id})
 

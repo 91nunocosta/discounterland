@@ -2,6 +2,13 @@ import re
 from tests.app.helpers import items_without_meta
 
 
+WORD = "[0-9A-Z]{4,4}"
+
+
+def _is_valid_code(code: str) -> bool:
+    return re.fullmatch(f"{WORD}-{WORD}-{WORD}-{WORD}", code) is not None
+
+
 def test_add_discount(db, client, token, user, promotion):
     promotion_id = str(promotion["_id"])
     consumer_id = user["_id"]
@@ -18,14 +25,24 @@ def test_add_discount(db, client, token, user, promotion):
 
     assert response.status_code == 201
 
+    response_body = items_without_meta([response.json])[0]
+
+    assert set(response_body) == {"promotion", "code", "expiration_date"}
+
+    promotion["_id"] = str(promotion["_id"])
+
+    assert response_body["promotion"] == promotion
+
+    assert response_body["expiration_date"] == promotion["expiration_date"]
+
+    assert _is_valid_code(response_body["code"])
+
     added_discount = dict(db.discounts.find_one())
 
     assert (set(items_without_meta([added_discount])[0].keys())
             == {"promotion_id", "code"})
 
     assert added_discount["promotion_id"] == promotion_id 
-
-    WORD = "[0-9A-Z]{4,4}"
 
     assert re.fullmatch(f"{WORD}-{WORD}-{WORD}-{WORD}", added_discount["code"])
 
