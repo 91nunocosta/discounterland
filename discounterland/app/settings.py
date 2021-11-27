@@ -12,6 +12,7 @@ SETTINGS = {
     # The etag is returned by the server on each operation over the item.
     # I chose to disable this to make it easier to try out the API.
     # In a real-life scenario I would't do so.
+    "DATE_FORMAT": "%Y-%m-%dT%H:%M:%S.%fZ",
     "IF_MATCH": False,
     "DOMAIN": {
         "accounts": {
@@ -38,6 +39,34 @@ SETTINGS = {
             "resource_methods": [],
             "public_methods": [],
             "schema": {},
+        },
+        "promotions": {
+            "url": 'brands/<regex("[a-f0-9]{24}"):brand_id>/promotions',
+            "resource_methods": ["POST"],
+            "public_methods": [],
+            "schema": {
+                "brand_id": {
+                    "type": "string",
+                },
+                "expiration_date": {
+                    "type": "datetime",
+                },
+                "product": {
+                    "type": "dict",
+                    "schema": {
+                        "name": {"type": "string"},
+                        "images": {
+                            "type": "list",
+                            "schema": {
+                                "type": "string",
+                            },
+                        },
+                    },
+                },
+                "discounts_quantity": {
+                    "type": "integer",
+                },
+            },
         },
     },
 }
