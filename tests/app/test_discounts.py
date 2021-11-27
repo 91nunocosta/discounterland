@@ -67,3 +67,22 @@ def test_add_discount_for_unauthorized_user(db, client, token):
     )
 
     assert response.status_code == 401
+
+
+def test_add_discount_for_non_existing_consumer(db, client, token):
+    db.discounts.drop()
+
+    promotion_id = "61a22c8f43cf71b9933afdd7"
+    consumer_id = "61a28cbb7cc480477ff9ea88"
+
+    discount = {
+        "promotion_id": promotion_id,
+    }
+
+    response = client.post(
+        f"/consumers/{consumer_id}/discounts",
+        json=discount,
+        headers={"authorization": token},
+    )
+
+    assert response.status_code == 401
