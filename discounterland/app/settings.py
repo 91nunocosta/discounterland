@@ -66,6 +66,7 @@ SETTINGS = {
                             "type": "list",
                             "schema": {
                                 "type": "string",
+                                "isurl": "true",
                             },
                         },
                     },
