@@ -1,10 +1,9 @@
 from typing import Any, Dict, Iterable
 
-from eve.auth import TokenAuth
 from flask import current_app, request
 
 from discounterland.auth.passwords import check_password, password_hash
-from discounterland.auth.tokens import check_token, generate_token
+from discounterland.auth.tokens import generate_token
 
 
 def replace_password_with_hash(items: Iterable[Dict[str, Any]]) -> None:
@@ -35,11 +34,3 @@ def login():
     }
 
     return invalid_login_response, 401
-
-
-class JWTTokenAuth(TokenAuth):
-    def check_auth(self, token, allowed_roles, resource, method):
-        token_payload = check_token(token)
-        username = token_payload["sub"]
-        self.set_request_auth_value(username)
-        return token_payload is not None

@@ -8,9 +8,6 @@ class ConsumerJWTTokenAuth(TokenAuth):
     def check_auth(self, token, allowed_roles, resource, method):
         token_payload = check_token(token)
 
-        if token_payload is None:
-            return False
-
         username = token_payload["sub"]
 
         self.set_request_auth_value(username)

@@ -94,19 +94,16 @@ def token(user):
     # it is finished when the test stops
     token_payload = {"sub": user["username"]}
 
-    patcher1 = patch("discounterland.app.auth.check_token", lambda _: token_payload)
     patcher2 = patch(
         "discounterland.app.consumers.check_token", lambda _: token_payload
     )
     patcher3 = patch("discounterland.app.brands.check_token", lambda _: token_payload)
 
-    patcher1.start()
     patcher2.start()
     patcher3.start()
 
     yield token_payload
 
-    patcher1.stop()
     patcher2.stop()
     patcher3.stop()
 
