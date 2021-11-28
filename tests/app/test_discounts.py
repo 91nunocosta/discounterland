@@ -1,8 +1,8 @@
 import re
 from unittest.mock import patch
-from tests.app.helpers import items_without_meta
-from discounterland.app.discounts import _serialize_date
 
+from discounterland.app.discounts import _serialize_date
+from tests.app.helpers import items_without_meta
 
 WORD = "[0-9A-Z]{4,4}"
 
@@ -42,10 +42,13 @@ def test_add_discount(db, client, token, user, promotion):
 
     added_discount = dict(db.discounts.find_one())
 
-    assert (set(items_without_meta([added_discount])[0].keys())
-            == {"promotion_id", "code", "consumer_id"})
+    assert set(items_without_meta([added_discount])[0].keys()) == {
+        "promotion_id",
+        "code",
+        "consumer_id",
+    }
 
-    assert added_discount["promotion_id"] == promotion_id 
+    assert added_discount["promotion_id"] == promotion_id
 
     assert added_discount.get("consumer_id") == consumer_id
 
@@ -73,10 +76,12 @@ def test_add_discount_for_non_authenticated_user(db, client, promotion):
 def test_add_discount_for_unauthorized_user(db, client, token, promotion):
     db.discounts.drop()
 
-    consumer_id = db.accounts.insert_one({
-        "username": "someone",
-        "password": "insecurepass",
-    }).inserted_id
+    consumer_id = db.accounts.insert_one(
+        {
+            "username": "someone",
+            "password": "insecurepass",
+        }
+    ).inserted_id
 
     promotion_id = str(promotion["_id"])
 
@@ -163,10 +168,14 @@ def test_add_discount_after_no_more_discounts_available(db, client, promotion):
         token_payload = {"sub": username}
 
         with patch("discounterland.app.consumers.check_token", lambda _: token_payload):
-            consumer_id = str(db.accounts.insert_one({
-                "username": username,
-                "password": "insecurepass",
-            }).inserted_id)
+            consumer_id = str(
+                db.accounts.insert_one(
+                    {
+                        "username": username,
+                        "password": "insecurepass",
+                    }
+                ).inserted_id
+            )
 
             response = client.post(
                 f"/consumers/{consumer_id}/discounts",
@@ -185,7 +194,7 @@ def test_add_discount_twice_for_same_consumer(db, client, token, user, promotion
         "promotion_id": promotion_id,
     }
 
-    for i in range(2):
+    for _ in range(2):
 
         response = client.post(
             f"/consumers/{consumer_id}/discounts",

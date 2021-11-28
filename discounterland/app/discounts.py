@@ -1,9 +1,10 @@
+import datetime
 import json
 import random
 import string
-import datetime
+
 from bson import ObjectId
-from flask import current_app, abort, request
+from flask import abort, current_app, request
 
 from discounterland.app.settings import SETTINGS
 
@@ -23,7 +24,7 @@ def _get_promotion(promotion_id):
 
 
 def check_promotion(items):
-    
+
     for item in items:
         promotion_id = item["promotion_id"]
 
@@ -38,10 +39,15 @@ def check_promotion(items):
 
         if expiration_date < now:
             return abort(422)
-        
+
         consumer_id = item["consumer_id"]
 
-        if _get_db().discounts.count({"promotion_id": promotion_id, "consumer_id": consumer_id}) > 0:
+        if (
+            _get_db().discounts.count(
+                {"promotion_id": promotion_id, "consumer_id": consumer_id}
+            )
+            > 0
+        ):
             return abort(422)
 
         discounts_count = _get_db().discounts.count({"promotion_id": promotion_id})
@@ -52,9 +58,9 @@ def check_promotion(items):
 
 def add_consumer_id(items):
     for item in items:
-        
+
         consumer_id = ObjectId(request.path.rsplit("/")[2])
-        
+
         item["consumer_id"] = consumer_id
 
 

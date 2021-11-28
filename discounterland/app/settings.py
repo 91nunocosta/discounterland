@@ -1,9 +1,7 @@
 import os
 
-from discounterland.app.auth import JWTTokenAuth
-from discounterland.app.consumers import ConsumerJWTTokenAuth
 from discounterland.app.brands import BrandsJWTTokenAuth
-
+from discounterland.app.consumers import ConsumerJWTTokenAuth
 
 SETTINGS = {
     "SERVER_NAME": os.environ.get("SERVER_NAME", "0.0.0.0:5000"),

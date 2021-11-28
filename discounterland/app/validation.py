@@ -1,10 +1,10 @@
-from eve.io.mongo import Validator
 import datetime
+
 import validators
+from eve.io.mongo import Validator
 
 
 class ExtendedValidator(Validator):
-
     def _validate_isfuture(self, isfuture, field, value):
         if not isfuture:
             return

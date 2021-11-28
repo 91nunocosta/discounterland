@@ -1,5 +1,5 @@
-from unittest.mock import patch
 import datetime
+from unittest.mock import patch
 
 import pytest
 
@@ -40,16 +40,17 @@ def user(db):
 def promotion(db):
     _id = db.promotions.insert_one(
         {
-          "id": "/promotions/20211fcf-0116-4217-9816-be11a4954344",
-          "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
-          "expiration_date": datetime.datetime.now() + datetime.timedelta(days=365),
-          "product": {
-            "name": "Nutella",
-            "images": [
-              "https://images.jumpseller.com/store/hercules-it-llc/10188702/Nutella.jpg"
-            ]
-          },
-          "discounts_quantity": 10
+            "id": "/promotions/20211fcf-0116-4217-9816-be11a4954344",
+            "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
+            "expiration_date": datetime.datetime.now() + datetime.timedelta(days=365),
+            "product": {
+                "name": "Nutella",
+                "images": [
+                    "https://images.jumpseller.com/store/hercules-it-llc/10188702/"
+                    "Nutella.jpg"
+                ],
+            },
+            "discounts_quantity": 10,
         }
     ).inserted_id
 
@@ -60,16 +61,17 @@ def promotion(db):
 def expired_promotion(db):
     _id = db.promotions.insert_one(
         {
-          "id": "/promotions/20211fcf-0116-4217-9816-be11a4954344",
-          "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
-          "expiration_date": datetime.datetime(2020, 11, 25, 16),
-          "product": {
-            "name": "Nutella",
-            "images": [
-              "https://images.jumpseller.com/store/hercules-it-llc/10188702/Nutella.jpg"
-            ]
-          },
-          "discounts_quantity": 10
+            "id": "/promotions/20211fcf-0116-4217-9816-be11a4954344",
+            "brand_id": "/brands/745ba01d-51a1-4615-9571-ee14d15bb4af",
+            "expiration_date": datetime.datetime(2020, 11, 25, 16),
+            "product": {
+                "name": "Nutella",
+                "images": [
+                    "https://images.jumpseller.com/store/hercules-it-llc/10188702/"
+                    "Nutella.jpg"
+                ],
+            },
+            "discounts_quantity": 10,
         }
     ).inserted_id
 
@@ -93,7 +95,9 @@ def token(user):
     token_payload = {"sub": user["username"]}
 
     patcher1 = patch("discounterland.app.auth.check_token", lambda _: token_payload)
-    patcher2 = patch("discounterland.app.consumers.check_token", lambda _: token_payload)
+    patcher2 = patch(
+        "discounterland.app.consumers.check_token", lambda _: token_payload
+    )
     patcher3 = patch("discounterland.app.brands.check_token", lambda _: token_payload)
 
     patcher1.start()

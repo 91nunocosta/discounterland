@@ -13,7 +13,7 @@ class BrandsJWTTokenAuth(TokenAuth):
             return False
 
         username = token_payload["sub"]
-    
+
         self.set_request_auth_value(username)
 
         requested_brand_id = request.path.rsplit("/")[2]
@@ -22,10 +22,10 @@ class BrandsJWTTokenAuth(TokenAuth):
 
         auth_account_id = db.accounts.find_one({"username": username})["_id"]
 
-        result = db.brand_managers.find_one({'account_id': auth_account_id,
-                                             'brand_id': ObjectId(requested_brand_id)})
+        result = db.brand_managers.find_one(
+            {"account_id": auth_account_id, "brand_id": ObjectId(requested_brand_id)}
+        )
         if result is None:
             return False
 
         return True
-

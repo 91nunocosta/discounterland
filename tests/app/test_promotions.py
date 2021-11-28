@@ -1,10 +1,10 @@
-from dateutil.parser import parse
 import datetime
-from bson import ObjectId
 
-from tests.app.helpers import items_without_meta
+from bson import ObjectId
+from dateutil.parser import parse
 
 from discounterland.app.discounts import _serialize_date
+from tests.app.helpers import items_without_meta
 
 
 def test_add_promotion(db, client, token, user):
@@ -17,10 +17,12 @@ def test_add_promotion(db, client, token, user):
     db.brands.insert_one({"_id": brand_id})
 
     # user needs to be one of the brand's manager
-    db.brand_managers.insert_one({
-        "brand_id": ObjectId(brand_id),
-        "account_id": user_id,
-    })
+    db.brand_managers.insert_one(
+        {
+            "brand_id": ObjectId(brand_id),
+            "account_id": user_id,
+        }
+    )
 
     datestring = _serialize_date(datetime.datetime.now() + datetime.timedelta(days=1))
     date = parse(datestring).replace(tzinfo=None).replace(microsecond=0)
@@ -55,9 +57,9 @@ def test_add_promotion(db, client, token, user):
 
     added_promotion = dict(db.promotions.find_one())
 
-    added_promotion["expiration_date"] = added_promotion["expiration_date"].replace(
-        tzinfo=None
-    ).replace(microsecond=0)
+    added_promotion["expiration_date"] = (
+        added_promotion["expiration_date"].replace(tzinfo=None).replace(microsecond=0)
+    )
 
     assert items_without_meta([added_promotion]) == items_without_meta(
         [expected_response]
@@ -129,10 +131,12 @@ def test_add_promotion_with_past_expiration_date(db, client, token, user):
     db.brands.insert_one({"_id": brand_id})
 
     # user needs to be one of the brand's manager
-    db.brand_managers.insert_one({
-        "brand_id": ObjectId(brand_id),
-        "account_id": user_id,
-    })
+    db.brand_managers.insert_one(
+        {
+            "brand_id": ObjectId(brand_id),
+            "account_id": user_id,
+        }
+    )
 
     datestring = "2020-11-25T16:51:02.003Z"
 
@@ -167,10 +171,12 @@ def test_add_promotion_with_non_positive_discount_quantity(db, client, token, us
     db.brands.insert_one({"_id": brand_id})
 
     # user needs to be one of the brand's manager
-    db.brand_managers.insert_one({
-        "brand_id": ObjectId(brand_id),
-        "account_id": user_id,
-    })
+    db.brand_managers.insert_one(
+        {
+            "brand_id": ObjectId(brand_id),
+            "account_id": user_id,
+        }
+    )
 
     datestring = _serialize_date(datetime.datetime.now() + datetime.timedelta(days=1))
 
@@ -205,10 +211,12 @@ def test_add_promotion_with_non_url_product_image(db, client, token, user):
     db.brands.insert_one({"_id": brand_id})
 
     # user needs to be one of the brand's manager
-    db.brand_managers.insert_one({
-        "brand_id": ObjectId(brand_id),
-        "account_id": user_id,
-    })
+    db.brand_managers.insert_one(
+        {
+            "brand_id": ObjectId(brand_id),
+            "account_id": user_id,
+        }
+    )
 
     datestring = _serialize_date(datetime.datetime.now() + datetime.timedelta(days=1))
     date = parse(datestring).replace(tzinfo=None).replace(microsecond=0)
@@ -217,9 +225,7 @@ def test_add_promotion_with_non_url_product_image(db, client, token, user):
         "expiration_date": datestring,
         "product": {
             "name": "Nutella",
-            "images": [
-                "images.jumpseller/store/hercules-it-llc/10188702/Nutella.jpg"
-            ],
+            "images": ["images.jumpseller/store/hercules-it-llc/10188702/Nutella.jpg"],
         },
         "discounts_quantity": 10,
     }

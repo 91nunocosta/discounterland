@@ -12,11 +12,11 @@ class ConsumerJWTTokenAuth(TokenAuth):
             return False
 
         username = token_payload["sub"]
-    
+
         self.set_request_auth_value(username)
 
-        accounts = current_app.data.driver.db['accounts']
-        auth_account = accounts.find_one({'username': username})
+        accounts = current_app.data.driver.db["accounts"]
+        auth_account = accounts.find_one({"username": username})
         auth_consumer_id = str(auth_account["_id"])
 
         requested_consumer_id = request.path.rsplit("/")[2]
@@ -25,4 +25,3 @@ class ConsumerJWTTokenAuth(TokenAuth):
             return False
 
         return True
-

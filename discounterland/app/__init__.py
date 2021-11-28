@@ -2,10 +2,14 @@ from eve import Eve
 
 from discounterland import __version__
 from discounterland.app.auth import login, replace_password_with_hash
+from discounterland.app.discounts import (
+    add_code,
+    add_consumer_id,
+    add_promotion_details,
+    check_promotion,
+)
 from discounterland.app.settings import SETTINGS
 from discounterland.app.validation import ExtendedValidator
-
-from discounterland.app.discounts import check_promotion, add_code, add_promotion_details, add_consumer_id
 
 
 def create_app():
