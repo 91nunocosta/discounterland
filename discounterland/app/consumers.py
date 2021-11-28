@@ -21,9 +21,6 @@ class ConsumerJWTTokenAuth(TokenAuth):
 
         requested_consumer_id = request.path.rsplit("/")[2]
 
-        print(requested_consumer_id)
-        print(auth_consumer_id)
-
         if auth_consumer_id != requested_consumer_id:
             return False
 

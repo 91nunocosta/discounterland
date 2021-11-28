@@ -39,8 +39,6 @@ def check_promotion(items):
         if expiration_date < now:
             return abort(422)
         
-        print(item)
-
         consumer_id = item["consumer_id"]
 
         if _get_db().discounts.count({"promotion_id": promotion_id, "consumer_id": consumer_id}) > 0:
@@ -93,8 +91,6 @@ def add_promotion_details(request, payload):
 
     promotion["_id"] = str(promotion["_id"])
     promotion["expiration_date"] = _serialize_date(promotion["expiration_date"])
-
-    print(promotion)
 
     body["expiration_date"] = promotion["expiration_date"]
     body["promotion"] = promotion

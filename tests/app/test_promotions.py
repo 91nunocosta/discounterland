@@ -51,8 +51,6 @@ def test_add_promotion(db, client, token, user):
         headers={"Authorization": token},
     )
 
-    print(response.json)
-
     assert response.status_code == 201
 
     added_promotion = dict(db.promotions.find_one())
@@ -60,8 +58,6 @@ def test_add_promotion(db, client, token, user):
     added_promotion["expiration_date"] = added_promotion["expiration_date"].replace(
         tzinfo=None
     ).replace(microsecond=0)
-
-    print(added_promotion)
 
     assert items_without_meta([added_promotion]) == items_without_meta(
         [expected_response]
