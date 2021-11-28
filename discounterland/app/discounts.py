@@ -4,7 +4,7 @@ import random
 import string
 
 from bson import ObjectId
-from flask import abort, current_app, request
+from flask import abort, current_app, make_response, request
 
 from discounterland.app.settings import SETTINGS
 
@@ -31,14 +31,16 @@ def check_promotion(items):
         promotion = _get_promotion(promotion_id)
 
         if promotion is None:
-            abort(422)
+            response = make_response("Promotion not found", 422)
+            abort(response)
 
         expiration_date = promotion["expiration_date"]
 
         now = datetime.datetime.now().replace(tzinfo=expiration_date.tzinfo)
 
         if expiration_date < now:
-            return abort(422)
+            response = make_response("Promotion expired", 422)
+            return abort(response)
 
         consumer_id = item["consumer_id"]
 
@@ -48,12 +50,16 @@ def check_promotion(items):
             )
             > 0
         ):
-            return abort(422)
+            response = make_response("Promotion already used", 422)
+            return abort(response)
 
         discounts_count = _get_db().discounts.count({"promotion_id": promotion_id})
 
         if discounts_count >= promotion["discounts_quantity"]:
-            return abort(422)
+            response = make_response(
+                "No more discounts available for this promotion", 422
+            )
+            return abort(response)
 
 
 def add_consumer_id(items):
