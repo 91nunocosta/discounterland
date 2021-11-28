@@ -38,6 +38,13 @@ def check_promotion(items):
 
         if expiration_date < now:
             return abort(422)
+        
+        print(item)
+
+        consumer_id = item["consumer_id"]
+
+        if _get_db().discounts.count({"promotion_id": promotion_id, "consumer_id": consumer_id}) > 0:
+            return abort(422)
 
         discounts_count = _get_db().discounts.count({"promotion_id": promotion_id})
 

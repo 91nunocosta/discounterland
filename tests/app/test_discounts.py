@@ -1,4 +1,5 @@
 import re
+from unittest.mock import patch
 from tests.app.helpers import items_without_meta
 from discounterland.app.discounts import _serialize_date
 
@@ -148,7 +149,35 @@ def test_add_discount_for_expired_promotion(db, client, token, user, expired_pro
     assert response.status_code == 422
 
 
-def test_add_discount_after_no_more_discounts_available(db, client, token, user, promotion):
+def test_add_discount_after_no_more_discounts_available(db, client, promotion):
+    promotion_id = str(promotion["_id"])
+
+    discount = {
+        "promotion_id": promotion_id,
+    }
+
+    for i in range(promotion["discounts_quantity"] + 1):
+
+        username = f"user{i}"
+
+        token_payload = {"sub": username}
+
+        with patch("discounterland.app.consumers.check_token", lambda _: token_payload):
+            consumer_id = str(db.accounts.insert_one({
+                "username": username,
+                "password": "insecurepass",
+            }).inserted_id)
+
+            response = client.post(
+                f"/consumers/{consumer_id}/discounts",
+                json=discount,
+                headers={"authorization": "a"},
+            )
+
+    assert response.status_code == 422
+
+
+def test_add_discount_twice_for_same_consumer(db, client, token, user, promotion):
     promotion_id = str(promotion["_id"])
     consumer_id = user["_id"]
 
@@ -156,7 +185,7 @@ def test_add_discount_after_no_more_discounts_available(db, client, token, user,
         "promotion_id": promotion_id,
     }
 
-    for i in range(promotion["discounts_quantity"] + 1):
+    for i in range(2):
 
         response = client.post(
             f"/consumers/{consumer_id}/discounts",
