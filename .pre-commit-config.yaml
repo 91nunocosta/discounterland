@@ -66,6 +66,7 @@ repos:
         require_serial: true
         pass_filenames: false
         verbose: true
+        types: [python]
         args: [
           "--cov-fail-under", "100",
           "--cov", "discounterland",
@@ -80,6 +81,7 @@ repos:
         require_serial: true
         pass_filenames: false
         verbose: true
+        types: [python]
         args: [
           "-f",
           "-o", "coverage.svg",

@@ -2,7 +2,6 @@
 
 RESTful web service for generating discount codes.
 
-[![Built with Cookiecutter Python Package](https://img.shields.io/badge/built%20with-Cookiecutter%20Python%20Package-ff69b4.svg?logo=cookiecutter)](https://github.com/91nunocosta/discounterland-cookiecutter)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ![Code Coverage](coverage.svg)
@@ -11,29 +10,35 @@ RESTful web service for generating discount codes.
 
 ### From source
 
-1. Install [docker](https://docs.docker.com/get-docker/).
+1. Install the required tools:
 
-2. Install [docker-compose](https://docs.docker.com/compose/install/).
+   1. Install [docker](https://docs.docker.com/get-docker/).
 
-3. Clone the repository.
+   2. Install [docker-compose](https://docs.docker.com/compose/install/).
+
+2. Clone the repository.
 
    ```bash
    git clone git@github.com:91nunocosta/discounterland.git
    ```
 
-4. Open the project directory.
+3. Open the project directory.
 
    ```bash
    cd discounterland
    ```
 
-5. Start docker containers with MongoDB and the web server:
+4. Start docker containers with MongoDB and the web server:
 
    ```bash
    docker-compose up -d
    ```
 
-6. Stop the dockers once you are done.
+5. Stop the dockers once you are done.
+
+    ```bash
+    docker-compose down
+    ```
 
 ## Usage
 
@@ -57,7 +62,7 @@ Before executing the following examples, set the environment variable `TOKEN` wi
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI
 ```
 
-### Get documentation
+#### Get available resources
 
 Get the available endpoints (the format is not Open API).
 
@@ -107,26 +112,32 @@ curl --location \
 
 ### How to prepare the development environment
 
-1. Clone the repository.
+1. Install the required tools:
+
+   1. Install [_poetry_](https://python-poetry.org/) _package and dependency manager_.
+   Follow the [poetry installation guide](https://python-poetry.org/docs/#installation).
+   Chose the method that is more convenient to you, for example:
+
+      ```bash
+      curl -sSL\
+           https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
+         | python -
+      ```
+
+   2. Install [docker](https://docs.docker.com/get-docker/).
+
+   3. Install [docker-compose](https://docs.docker.com/compose/install/).
+
+2. Clone the repository.
 
    ```bash
    git clone git@github.com:91nunocosta/discounterland.git
    ```
 
-2. Open the project directory.
+3. Open the project directory.
 
    ```bash
    cd discounterland
-   ```
-
-3. Install [_poetry_](https://python-poetry.org/) _package and dependency manager_.
-Follow the [poetry installation guide](https://python-poetry.org/docs/#installation).
-Chose the method that is more convenient to you, for example:
-
-   ```bash
-   curl -sSL\
-        https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
-      | python -
    ```
 
 4. Create a new virtual environment (managed by _poetry_) with the project dependencies.
@@ -140,6 +151,18 @@ Chose the method that is more convenient to you, for example:
    ```bash
    poetry shell
    ```
+
+6. Start docker containers with MongoDB:
+
+   ```bash
+   docker-compose -f ./docker-compose-dev.yaml up -d
+   ```
+
+7. Stop the docker once you are done.
+
+    ```bash
+    docker-compose -f ./docker-compose-dev.yaml down
+    ```
 
 ### How to check code quality
 
@@ -156,8 +179,8 @@ Chose the method that is more convenient to you, for example:
 
 You can run all tests against a real server instance.
 
-1. Run the script [functional_tests](.functional_tests.sh).
+1. Run the script [functional_tests](./funtional_test.sh)
 
 ```bash
-./functional_tests.sh
+./funtional_test.sh
 ```
