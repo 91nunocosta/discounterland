@@ -2,8 +2,10 @@ import datetime
 from unittest.mock import patch
 
 import pytest
+import requests
+import simplejson.errors
 
-from discounterland.app import create_app
+from discounterland.app import SETTINGS, create_app
 
 
 @pytest.fixture
@@ -11,8 +13,54 @@ def app():
     return create_app()
 
 
+class RequestsClient:
+    def __init__(self, host):
+        self.host = host
+
+    def _url(self, path):
+        if not path.startswith("/"):
+            path = "/" + path
+
+        return self.host + path
+
+    def _add_json_property(self, response):
+        try:
+            json = response.json()
+
+            response.json = json
+        except simplejson.errors.JSONDecodeError:
+            pass
+
+    def get(self, path, headers=None):
+        if headers is None:
+            headers = {}
+
+        response = requests.get(self._url(path), headers=headers)
+
+        self._add_json_property(response)
+
+        return response
+
+    def post(self, path, json=None, headers=None):
+        if json is None:
+            json = {}
+
+        if headers is None:
+            headers = {}
+
+        response = requests.post(self._url(path), json=json, headers=headers)
+
+        self._add_json_property(response)
+
+        return response
+
+
 @pytest.fixture
-def client(app):
+def client(functional, app):
+
+    if functional:
+        return RequestsClient("http://" + SETTINGS["SERVER_NAME"])
+
     return app.test_client()
 
 
@@ -102,7 +150,7 @@ def token(user):
     patcher2.start()
     patcher3.start()
 
-    yield token_payload
+    yield "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI"  # noqa
 
     patcher2.stop()
     patcher3.stop()
