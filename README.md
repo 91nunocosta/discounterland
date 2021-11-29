@@ -23,9 +23,9 @@ $ docker-compose up -d
 
 Do your requests:
 ```bash
-$ curl "http://0.0.0.0:5000/api-docs"
+$ curl "http://0.0.0.0:5000/"
 ```
-This request returns you the Open API spec mentioned in the next section.
+This request returns you the available endpoints.
 
 You can run the script [examples.sh](examples.sh). The script contains some examples of valid requests. You should get success responses to all requests, if no change was made to the database.
 
