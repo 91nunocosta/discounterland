@@ -1,12 +1,12 @@
 import datetime
 import os
-from unittest.mock import patch
 
 import pytest
 import requests
 import simplejson.errors
 
 from discounterland.app import SETTINGS, create_app
+from discounterland.auth.tokens import generate_token
 
 
 @pytest.fixture
@@ -142,28 +142,12 @@ def jwt_secret(user):
 
 
 @pytest.fixture
-def token(user):
-    # the fixture is evaluated before each test who depend on it
-    # then it is injected in the test (dependency injection)
-    # in this case, after the test ends the context returns here
-    # and continues after the yield expression
+def token(user, jwt_secret):
+    username = user["username"]
 
-    # a patch for mocking the check_token function is started before the test
-    # it is finished when the test stops
-    token_payload = {"sub": user["username"]}
+    token_value = generate_token(username)
 
-    patcher2 = patch(
-        "discounterland.app.consumers.check_token", lambda _: token_payload
-    )
-    patcher3 = patch("discounterland.app.brands.check_token", lambda _: token_payload)
-
-    patcher2.start()
-    patcher3.start()
-
-    yield "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI"  # noqa
-
-    patcher2.stop()
-    patcher3.stop()
+    return f"Bearer {token_value}"
 
 
 @pytest.fixture
