@@ -1,13 +1,17 @@
 from bson import ObjectId
 from eve.auth import TokenAuth
 from flask import current_app, request
+from jwt.exceptions import InvalidTokenError
 
 from discounterland.auth.tokens import check_token
 
 
 class BrandsJWTTokenAuth(TokenAuth):
     def check_auth(self, token, allowed_roles, resource, method):
-        token_payload = check_token(token)
+        try:
+            token_payload = check_token(token)
+        except InvalidTokenError:
+            return False
 
         username = token_payload["sub"]
 
