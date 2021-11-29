@@ -1,6 +1,6 @@
 import datetime
 import json
-import random
+import secrets
 import string
 
 from bson import ObjectId
@@ -73,7 +73,7 @@ def add_consumer_id(items):
 
 
 def _char() -> str:
-    return random.choice(string.ascii_uppercase + string.digits)
+    return secrets.choice(string.ascii_uppercase + string.digits)
 
 
 def _word() -> str:

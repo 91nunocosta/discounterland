@@ -33,6 +33,11 @@ repos:
       - id: flake8
         # for black compatibility
         args: ["--max-line-length", "88"]
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.0
+    hooks:
+      - id: bandit
+        args: ["--exclude", "tests"]
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v2.20.0
     hooks:
