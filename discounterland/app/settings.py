@@ -14,7 +14,7 @@ SETTINGS = {
     # For that it needs to provide the correct etag (an hash).
     # The etag is returned by the server on each operation over the item.
     # I chose to disable this to make it easier to try out the API.
-    # In a real-life scenario I would't do so.
+    # In a real-life scenario I wouldn't do so.
     "DATE_FORMAT": "%Y-%m-%dT%H:%M:%S.%fZ",
     "IF_MATCH": False,
     "DOMAIN": {

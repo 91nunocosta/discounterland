@@ -1,11 +1,11 @@
 from bcrypt import checkpw, gensalt, hashpw
 
 
-def check_password(recieved_password: str, stored_password: bytes) -> bool:
+def check_password(received_password: str, stored_password: bytes) -> bool:
     """
-    Check if a recieved password matches the stored password.
+    Check if a received password matches the stored password.
     """
-    return checkpw(recieved_password.encode("utf-8"), stored_password)
+    return checkpw(received_password.encode("utf-8"), stored_password)
 
 
 def password_hash(password: str) -> bytes:

@@ -82,7 +82,7 @@ There are some code quality verifications:
 1. unit test
 1. test coverage (in this case configured to 100%).
 
-These verifications are preformed by several tools. [pre-commit](https://pre-commit.com/) is used to automate the entire verification pipeline. You can check which tools are used in the [pre-commit configuration](.pre-commit-config.yaml)
+These verifications are performed by several tools. [pre-commit](https://pre-commit.com/) is used to automate the entire verification pipeline. You can check which tools are used in the [pre-commit configuration](.pre-commit-config.yaml)
 
 To run the code quality verifications in your machine you will need:
 - python3
@@ -124,7 +124,7 @@ $ docker-compose -f docker-file-dev.yaml down
 
 ## Functional Tests
 
-You can run the tests againts a real server instance.
+You can run the tests against a real server instance.
 
 Follow the tests above replacing `pre-commit run --all-files` by:
 
