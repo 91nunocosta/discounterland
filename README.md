@@ -121,3 +121,13 @@ For stopping the MongoDB instance (and releasing all the docker resources needed
 ```
 $ docker-compose -f docker-file-dev.yaml down
 ```
+
+## Functional Tests
+
+You can run the tests againts a real server instance.
+
+Follow the tests above replacing `pre-commit run --all-files` by:
+
+```bash
+./functional_tests.sh
+```
