@@ -1,6 +1,8 @@
 import re
 from unittest.mock import patch
 
+from bson import ObjectId
+
 from discounterland.app.discounts import _serialize_date
 from tests.app.helpers import items_without_meta
 
@@ -11,17 +13,32 @@ def _is_valid_code(code: str) -> bool:
     return re.fullmatch(f"{WORD}-{WORD}-{WORD}-{WORD}", code) is not None
 
 
+def jsonify(data):
+    if isinstance(data, ObjectId):
+        return str(data)
+
+    if isinstance(data, dict):
+        return {key: jsonify(value) for key, value in data.items()}
+
+    if isinstance(data, list):
+        return [jsonify(item) for item in data]
+
+    return data
+
+
 def test_add_discount(db, client, token, user, promotion):
-    promotion_id = str(promotion["_id"])
+    promotion_id = promotion["_id"]
     consumer_id = user["_id"]
 
-    discount = {
-        "promotion_id": promotion_id,
-    }
+    payload = jsonify(
+        {
+            "promotion_id": promotion_id,
+        }
+    )
 
     response = client.post(
         f"/consumers/{consumer_id}/discounts",
-        json=discount,
+        json=payload,
         headers={"authorization": token},
     )
 
@@ -31,10 +48,10 @@ def test_add_discount(db, client, token, user, promotion):
 
     assert set(response_body) == {"promotion", "code", "expiration_date"}
 
-    promotion["_id"] = str(promotion["_id"])
+    promotion["_id"] = promotion["_id"]
     promotion["expiration_date"] = _serialize_date(promotion["expiration_date"])
 
-    assert response_body["promotion"] == promotion
+    assert response_body["promotion"] == jsonify(promotion)
 
     assert response_body["expiration_date"] == promotion["expiration_date"]
 

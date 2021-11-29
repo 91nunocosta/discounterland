@@ -20,13 +20,15 @@ def _get_db():
 def _get_promotion(promotion_id):
     promotions = _get_db().promotions
 
-    return promotions.find_one({"_id": ObjectId(promotion_id)})
+    return promotions.find_one({"_id": promotion_id})
 
 
 def check_promotion(items):
 
     for item in items:
-        promotion_id = item["promotion_id"]
+        promotion_id = ObjectId(item["promotion_id"])
+
+        item["promotion_id"] = promotion_id
 
         promotion = _get_promotion(promotion_id)
 
@@ -103,7 +105,7 @@ def add_promotion_details(request, payload):
 
     promotion_id = request.json["promotion_id"]
 
-    promotion = _get_promotion(promotion_id)
+    promotion = _get_promotion(ObjectId(promotion_id))
 
     promotion["_id"] = str(promotion["_id"])
     promotion["expiration_date"] = _serialize_date(promotion["expiration_date"])
