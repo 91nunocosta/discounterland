@@ -91,6 +91,10 @@ def add_code(items):
 def add_promotion_details(request, payload):
     body = json.loads(payload.data)
 
+    # request was invalid
+    if "_id" not in body:
+        return
+
     discount_id = body["_id"]
 
     discount = _get_db().discounts.find_one({"_id": ObjectId(discount_id)})

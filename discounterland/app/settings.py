@@ -83,6 +83,7 @@ SETTINGS = {
             "schema": {
                 "promotion_id": {
                     "type": "string",
+                    "isid": True,
                 },
             },
         },

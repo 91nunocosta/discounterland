@@ -203,3 +203,19 @@ def test_add_discount_twice_for_same_consumer(db, client, token, user, promotion
         )
 
     assert response.status_code == 422
+
+
+def test_add_discount_for_invalid_promotion_id(db, client, token, user):
+    consumer_id = user["_id"]
+
+    discount = {
+        "promotion_id": "invalid_promotion_id",
+    }
+
+    response = client.post(
+        f"/consumers/{consumer_id}/discounts",
+        json=discount,
+        headers={"authorization": token},
+    )
+
+    assert response.status_code == 422
