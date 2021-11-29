@@ -1,26 +1,21 @@
-from unittest.mock import MagicMock, patch
-
-from tests.app.helpers import items_without_meta
+from discounterland.auth.passwords import check_password
 
 
 def test_add_account(db, client):
     db.accounts.drop()
 
-    account = {"username": "91nunocosta@gmail.com", "password": "unsecurepassword"}
+    username = "91nunocosta@gmail.com"
+    password = "unsecurepassword"
+    account = {"username": username, "password": password}
 
-    fake_hash = "fake_token"
-    password_hash_mock = MagicMock(return_value=fake_hash)
-
-    with patch("discounterland.app.auth.password_hash", password_hash_mock):
-        response = client.post("/accounts", json=account)
+    response = client.post("/accounts", json=account)
 
     assert response.status_code == 201
 
-    # password should be replaced by the corresponding hash
-    account["password"] = fake_hash
-
     added_account = db.accounts.find_one()
-    assert items_without_meta([added_account]) == items_without_meta([account])
+
+    assert added_account.get("username") == username
+    assert check_password(password, added_account.get("password"))
 
 
 def test_add_duplicate(db, client):
