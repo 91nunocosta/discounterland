@@ -1,74 +1,74 @@
 # Discounterland
 
-## How to run locally
+RESTful web service for generating discount codes.
 
-To run the application locally you will need:
+[![Built with Cookiecutter Python Package](https://img.shields.io/badge/built%20with-Cookiecutter%20Python%20Package-ff69b4.svg?logo=cookiecutter)](https://github.com/91nunocosta/discounterland-cookiecutter)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![Code Coverage](coverage.svg)
 
-- [docker](https://docs.docker.com/engine/install/)
-- [docker-compose](https://docs.docker.com/compose/install/)
+## Installation
 
-Clone this repository to some directory of your choice:
+### From source
 
-```bash
-git clone git@github.com:91nunocosta/discounterland.git
-```
+1. Install [docker](https://docs.docker.com/get-docker/).
 
-Go inside the project:
+2. Install [docker-compose](https://docs.docker.com/compose/install/).
 
-```bash
-cd discounterland
-```
+3. Clone the repository.
 
-Run docker-compose to build and run the required docker containers:
+   ```bash
+   git clone git@github.com:91nunocosta/discounterland.git
+   ```
 
-```bash
-docker-compose up -d
-```
+4. Open the project directory.
 
-Do your requests:
+   ```bash
+   cd discounterland
+   ```
 
-```bash
-curl "http://0.0.0.0:5000/"
+5. Start docker containers with MongoDB and the web server:
 
-```
+   ```bash
+   docker-compose up -d
+   ```
 
-This request returns you the available endpoints.
+6. Stop the dockers once you are done.
 
-You can run the script [examples.sh](examples.sh).
-The script contains some examples of valid requests.
-You should get success responses to all requests,
-if no change was made to the database.
-
-If you prefer to use [Postman](https://www.postman.com/),
-you can import [postman_collection](doc/postman_collection.json) and
-try the requests there.
-
-Once you are done, stop the docker containers running:
-
-```bash
-docker-compose down
-```
-
-## API
+## Usage
 
 You can find the full [Open API](https://swagger.io/specification/) documentation
 [here](./.optic/generated/openapi.yaml).
 
 It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis/nunocosta2/Discounterland/0.2.0/).
 
-Here are some examples of requests from [examples.sh](examples.sh).
-
 ### Examples
 
 The following sections exemplify how you can interact with the API using the _curl_.
 
-Before executing them, set the environment variable `TOKEN` with:
+You can execute the examples by running the script [examples.sh](examples.sh).
+If you prefer to use [Postman](https://www.postman.com/),
+you can import [postman_collection](doc/postman_collection.json) and
+try the requests there.
+
+Before executing the following examples, set the environment variable `TOKEN` with:
 
 ```bash
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI
 ```
 
+### Get documentation
+
+Get the available endpoints (the format is not Open API).
+
+```bash
+curl "http://0.0.0.0:5000/"
+
+```
+
 #### Create promotion
+
+A brand's manager creates a promotion with _10_ discount codes available.
 
 ```bash
 curl --location
@@ -90,6 +90,8 @@ curl --location
 
 #### Create discount
 
+A consumer generates a new discout code for himself/herself for the promotion created above.
+
 ```bash
 curl --location \
      --request POST \
@@ -101,70 +103,60 @@ curl --location \
      }'
 ```
 
-## Code quality
+## Contributing
 
-There are some code quality verifications:
+### How to prepare the development environment
 
-1. linting
-1. type checking (as python is an interpreted language,
-it's possible to run a program even if the type annotations are wrong)
-1. unit test
-1. test coverage (in this case configured to 100%).
+1. Clone the repository.
 
-These verifications are performed by several tools.
-[pre-commit](https://pre-commit.com/) is used to automate
-the entire verification pipeline.
-You can check which tools are used in the [pre-commit configuration](.pre-commit-config.yaml)
+   ```bash
+   git clone git@github.com:91nunocosta/discounterland.git
+   ```
 
-To run the code quality verifications in your machine you will need:
+2. Open the project directory.
 
-- python3
-- pip
-- [docker](https://docs.docker.com/engine/install/)
-- [docker-compose](https://docs.docker.com/compose/install/)
+   ```bash
+   cd discounterland
+   ```
 
-Clone this repository to some directory of your choice:
+3. Install [_poetry_](https://python-poetry.org/) _package and dependency manager_.
+Follow the [poetry installation guide](https://python-poetry.org/docs/#installation).
+Chose the method that is more convenient to you, for example:
 
-```bash
-git clone git@github.com:91nunocosta/discounterland.git
-```
+   ```bash
+   curl -sSL\
+        https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
+      | python -
+   ```
 
-Go inside the project:
+4. Create a new virtual environment (managed by _poetry_) with the project dependencies.
 
-```bash
-cd discounterland
-```
+   ```bash
+   poetry install
+   ```
 
-To install `pre-commit` execute:
+5. Enter the virtual environment.
 
-```bash
-pip install pre-commit
-```
+   ```bash
+   poetry shell
+   ```
 
-To be able to run the tests, an instance of MongoDB is needed. For that run:
+### How to check code quality
 
-```bash
-docker-compose -f docker-compose-dev.yaml up -d
-```
+1. Prepare the development environment, as described in
+[**How to prepare the development environment**](#how-to-prepare-the-development-environment).
 
-To execute the verifications, run:
+2. Lint and test code
 
-```bash
-pre-commit run --all-files
-```
+     ```bash
+     pre-commit run --all-files
+     ```
 
-For stopping the MongoDB instance
-(and releasing all the docker resources needed for it), run:
+### How to run  the functional tests
 
-```bash
-docker-compose -f docker-file-dev.yaml down
-```
+You can run all tests against a real server instance.
 
-### Functional Tests
-
-You can run the tests against a real server instance.
-
-Follow the tests above replacing `pre-commit run --all-files` by:
+1. Run the script [functional_tests](.functional_tests.sh).
 
 ```bash
 ./functional_tests.sh
