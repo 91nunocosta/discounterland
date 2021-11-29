@@ -1,10 +1,14 @@
-# build package
 
+ARG VERSION=0.1.0
+
+# build package
 FROM python
 
 RUN pip install poetry
 
 WORKDIR /app
+
+ARG VERSION
 
 COPY poetry.lock pyproject.toml ./
 
@@ -14,13 +18,18 @@ RUN poetry build --format wheel
 
 
 # build service
-
-FROm python
+FROM python
 
 RUN pip install gunicorn
 
-COPY --from=0 /app/dist/discounterland-0.1.0-py3-none-any.whl ./
+ARG VERSION
 
-RUN pip install discounterland-0.1.0-py3-none-any.whl
+ENV PACKAGE_FILE=discounterland-${VERSION}-py3-none-any.whl
+
+COPY --from=0 /app/dist/${PACKAGE_FILE} .
+
+RUN pip install ${PACKAGE_FILE}
+
+RUN rm ${PACKAGE_FILE}
 
 ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:5000", "discounterland.app.wsgi"]
