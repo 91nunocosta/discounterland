@@ -1,0 +1,9 @@
+name: "discounterland"
+tasks:
+  start:
+    command: source ./env && export SERVER_NAME=0.0.0.0:$PORT && discounterland
+    inboundUrl: http://0.0.0.0:5000
+
+  test:
+    command: pytest --functional
+    useTask: start

@@ -1,0 +1,416 @@
+openapi: 3.0.3
+info:
+ title: Optic Generated OpenAPI
+ version: 1.0.0
+paths:
+ /:
+  get:
+   responses:
+    '200':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _links:
+          type: object
+          properties:
+           child:
+            type: array
+            items:
+             type: object
+             properties:
+              title:
+               type: string
+              href:
+               type: string
+             required:
+              - title
+              - href
+          required:
+           - child
+        required:
+         - _links
+ /consumers/{consumer_id}/discounts:
+  parameters:
+   -
+    name: consumer_id
+    in: path
+    schema:
+     type: string
+    required: true
+  post:
+   requestBody:
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        promotion_id:
+         type: string
+       required:
+        - promotion_id
+   responses:
+    '201':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         promotion:
+          type: object
+          properties:
+           product:
+            type: object
+            properties:
+             name:
+              type: string
+             images:
+              type: array
+              items:
+               type: string
+            required:
+             - name
+             - images
+           id:
+            type: string
+           expiration_date:
+            type: string
+           discounts_quantity:
+            type: number
+           brand_id:
+            type: string
+           _id:
+            type: string
+          required:
+           - product
+           - id
+           - expiration_date
+           - discounts_quantity
+           - brand_id
+           - _id
+         expiration_date:
+          type: string
+         code:
+          type: string
+         _updated:
+          type: string
+         _status:
+          type: string
+         _links:
+          type: object
+          properties:
+           self:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+          required:
+           - self
+         _id:
+          type: string
+         _created:
+          type: string
+        required:
+         - promotion
+         - expiration_date
+         - code
+         - _updated
+         - _status
+         - _links
+         - _id
+         - _created
+    '401':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _status:
+          type: string
+         _error:
+          type: object
+          properties:
+           message:
+            type: string
+           code:
+            type: number
+          required:
+           - message
+           - code
+        required:
+         - _status
+         - _error
+    '422':
+     description: ''
+     content:
+      text/html:
+       schema:
+        type: string
+ /brands/{brand_id}/promotions:
+  parameters:
+   -
+    name: brand_id
+    in: path
+    schema:
+     type: string
+    required: true
+  post:
+   requestBody:
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        product:
+         type: object
+         properties:
+          name:
+           type: string
+          images:
+           type: array
+           items:
+            type: string
+         required:
+          - name
+          - images
+        expiration_date:
+         type: string
+        discounts_quantity:
+         type: number
+       required:
+        - product
+        - expiration_date
+        - discounts_quantity
+   responses:
+    '201':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _updated:
+          type: string
+         _status:
+          type: string
+         _links:
+          type: object
+          properties:
+           self:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+          required:
+           - self
+         _id:
+          type: string
+         _created:
+          type: string
+        required:
+         - _updated
+         - _status
+         - _links
+         - _id
+         - _created
+    '401':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _status:
+          type: string
+         _error:
+          type: object
+          properties:
+           message:
+            type: string
+           code:
+            type: number
+          required:
+           - message
+           - code
+        required:
+         - _status
+         - _error
+    '422':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _status:
+          type: string
+         _issues:
+          type: object
+          properties:
+           product:
+            type: object
+            properties:
+             images:
+              type: object
+              properties:
+               '0':
+                type: string
+              required:
+               - '0'
+            required:
+             - images
+           expiration_date:
+            type: string
+           discounts_quantity:
+            type: string
+         _error:
+          type: object
+          properties:
+           message:
+            type: string
+           code:
+            type: number
+          required:
+           - message
+           - code
+        required:
+         - _status
+         - _issues
+         - _error
+ /login:
+  post:
+   requestBody:
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        username:
+         type: string
+        password:
+         type: string
+       required:
+        - username
+        - password
+   responses:
+    '200':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         token:
+          type: string
+        required:
+         - token
+    '401':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _status:
+          type: string
+         _error:
+          type: string
+        required:
+         - _status
+         - _error
+ /accounts:
+  post:
+   requestBody:
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        username:
+         type: string
+        password:
+         type: string
+       required:
+        - username
+        - password
+   responses:
+    '201':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _updated:
+          type: string
+         _status:
+          type: string
+         _links:
+          type: object
+          properties:
+           self:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+          required:
+           - self
+         _id:
+          type: string
+         _created:
+          type: string
+        required:
+         - _updated
+         - _status
+         - _links
+         - _id
+         - _created
+    '422':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _status:
+          type: string
+         _issues:
+          type: object
+          properties:
+           username:
+            type: string
+          required:
+           - username
+         _error:
+          type: object
+          properties:
+           message:
+            type: string
+           code:
+            type: number
+          required:
+           - message
+           - code
+        required:
+         - _status
+         - _issues
+         - _error

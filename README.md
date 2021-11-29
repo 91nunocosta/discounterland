@@ -38,9 +38,9 @@ $ docker-compose down
 
 # API
 
-You can find the full [Open API](https://swagger.io/specification/) documentation in [open-api-spec.json](doc/open-api-spec.json).
+You can find the full [Open API](https://swagger.io/specification/) documentation [here](./.optic/generated/openapi.yaml).
 
-It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis/nunocosta2/Discounterland/0.1.0/).
+It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis/nunocosta2/Discounterland/0.2.0/).
 
 Here are some examples of requests from [examples.sh](examples.sh).
 
