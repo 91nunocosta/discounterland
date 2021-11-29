@@ -41,7 +41,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MTI5ODM0OTg5IiwibmFtZSI6IlBhdHJpY2siLCJpYXQiOjE1MTYyMzkwMjJ9.UNxtO1rOKdkMawosiKiaQ3yupcKZWAvev1N0Lb49m28",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI",
 							"type": "string"
 						}
 					]
@@ -50,7 +50,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"promotion_id\": \"/promotions/9e169116-e3de-41cc-952a-149ed1cc4b40\"\n}",
+					"raw": "{\n  \"promotion_id\": \"61a2d5606ac07b74c824f1a9\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -58,31 +58,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{host}}/consumers/61a22cb797321cee10c8df49/discounts",
+					"raw": "{{host}}/consumers/61a2d3be596808c5d69dd11b/discounts",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"consumers",
-						"61a22cb797321cee10c8df49",
+						"61a2d3be596808c5d69dd11b",
 						"discounts"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Open API documentation",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{host}}/api-docs",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api-docs"
 					]
 				}
 			},
@@ -93,7 +76,12 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": null
+				"url": {
+					"raw": "{{host}}",
+					"host": [
+						"{{host}}"
+					]
+				}
 			},
 			"response": []
 		}
