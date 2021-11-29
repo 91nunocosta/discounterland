@@ -1,6 +1,8 @@
 from unittest.mock import MagicMock, patch
 
 from discounterland.app.auth import replace_password_with_hash
+from discounterland.auth.passwords import password_hash
+from discounterland.auth.tokens import check_token
 
 
 def test_hash_password():
@@ -29,33 +31,36 @@ def test_non_existing_account_login(db, client):
     assert response.status_code == 401
 
 
-def test_invalid_password_login(db, client):
+def test_invalid_password_login(db, client, jwt_secret):
     db.accounts.drop()
 
-    data = {"username": "91nunocosta@gmail.com", "password": "notsecurepassword"}
+    username = "91nunocosta@gmail.com"
+    password = "notsecurepassword"
 
-    db.accounts.insert_one(dict(data))
+    data = {"username": username, "password": "invalid_password"}
+    account = {"username": username, "password": password_hash(password)}
 
-    with patch("discounterland.app.auth.check_password", lambda _a, _b: False):
-        response = client.post("login/", json=data)
+    db.accounts.insert_one(account)
+
+    response = client.post("login/", json=data)
 
     assert response.status_code == 401
 
 
-def test_valid_login(db, client):
+def test_valid_login(db, client, jwt_secret):
     db.accounts.drop()
 
-    data = {"username": "91nunocosta@gmail.com", "password": "notsecurepassword"}
+    username = "91nunocosta@gmail.com"
+    password = "notsecurepassword"
 
-    db.accounts.insert_one(dict(data))
+    data = {"username": username, "password": password}
+    account = {"username": username, "password": password_hash(password)}
 
-    fake_token = "this_is_a_fake_token"
+    db.accounts.insert_one(account)
 
-    with patch("discounterland.app.auth.generate_token", lambda _: fake_token):
-        with patch("discounterland.app.auth.check_password", lambda _a, _b: True):
-            response = client.post("login/", json=data)
+    response = client.post("login/", json=data)
 
     assert response.status_code == 200
 
     data = response.json
-    assert data["token"] == fake_token
+    assert check_token(data["token"])["sub"] == username
