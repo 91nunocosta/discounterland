@@ -134,17 +134,11 @@ def another_user():
 
 @pytest.fixture
 def jwt_secret(user):
+    if "JWT_SECRET" in os.environ:
+        return
+
     secret = "Tz7NqafQAPs4pwbhvp2w9zx7XE3smTwZ2OMA6unVs_L43QjSVY2T-xvF65w9A88FXv2GsUwJZBcPUiX0qbkkY6MDYVjS02PWd0o3OzQN_P1vFrAmcPFfzvnI9fgxVvboPwRnFCNzOACbegAN8J4FBTb0cy1r3WYUu0ZurS3nsM76h5dCdOQL97TmDsdqugRgAk16pfEna1pZ1U4HfjnKv8KebbX1qx_jYlIPJHbNDGsidLmXbTb5y4ApZQMr9w1uUyFhdRitYIlNQ2U3rFkZ6Xc1w5UPlvcL_QEnINaLwJVm-lKnPDJ67yhnRyd2uGRN0MDrfZXt8YTN2hIJ9fMoVQ"  # noqa
-
-    old_jwt_secret = os.environ.get("JWT_SECRET")
     os.environ["JWT_SECRET"] = secret
-
-    yield secret
-
-    if old_jwt_secret is None:
-        os.environ["JWT_SECRET"] = ""
-    else:
-        os.environ["JWT_SECRET"] = old_jwt_secret
 
 
 @pytest.fixture

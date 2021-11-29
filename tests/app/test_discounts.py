@@ -1,8 +1,8 @@
 import re
-from unittest.mock import patch
 
 from bson import ObjectId
 
+import discounterland.auth.tokens
 from discounterland.app.discounts import _serialize_date
 from tests.app.helpers import items_without_meta
 
@@ -171,7 +171,9 @@ def test_add_discount_for_expired_promotion(db, client, token, user, expired_pro
     assert response.status_code == 422
 
 
-def test_add_discount_after_no_more_discounts_available(db, client, promotion):
+def test_add_discount_after_no_more_discounts_available(
+    db, client, promotion, jwt_secret
+):
     promotion_id = str(promotion["_id"])
 
     discount = {
@@ -182,23 +184,22 @@ def test_add_discount_after_no_more_discounts_available(db, client, promotion):
 
         username = f"user{i}"
 
-        token_payload = {"sub": username}
+        consumer_id = str(
+            db.accounts.insert_one(
+                {
+                    "username": username,
+                    "password": "insecurepass",
+                }
+            ).inserted_id
+        )
 
-        with patch("discounterland.app.consumers.check_token", lambda _: token_payload):
-            consumer_id = str(
-                db.accounts.insert_one(
-                    {
-                        "username": username,
-                        "password": "insecurepass",
-                    }
-                ).inserted_id
-            )
+        token = discounterland.auth.tokens.generate_token(username)
 
-            response = client.post(
-                f"/consumers/{consumer_id}/discounts",
-                json=discount,
-                headers={"authorization": "a"},
-            )
+        response = client.post(
+            f"/consumers/{consumer_id}/discounts",
+            json=discount,
+            headers={"authorization": f"Bearer {token}"},
+        )
 
     assert response.status_code == 422
 
