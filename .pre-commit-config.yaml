@@ -72,3 +72,15 @@ repos:
           "--doctest-modules",
           "--doctest-glob", "README.md",
         ]
+
+      - id: coverage-badge
+        name: coverage badge
+        entry: coverage-badge
+        language: system
+        require_serial: true
+        pass_filenames: false
+        verbose: true
+        args: [
+          "-f",
+          "-o", "coverage.svg",
+        ]
