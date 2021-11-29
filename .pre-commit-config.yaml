@@ -1,0 +1,60 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-toml
+      - id: check-yaml
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.26.3
+    hooks:
+      - id: yamllint
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+  - repo: https://github.com/psf/black
+    rev: 21.10b0
+    hooks:
+      - id: black
+  - repo: https://github.com/PyCQA/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+        # for black compatibility
+        args: ["--max-line-length", "88"]
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.20.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: system
+        types: [python]
+        require_serial: true
+        pass_filenames: true
+        verbose: true
+
+      - id: pytest
+        name: pytest
+        entry: pytest
+        language: system
+        require_serial: true
+        pass_filenames: false
+        verbose: true
+        args: [
+          "--cov-fail-under", "100",
+          "--cov", "discounterland",
+          "--doctest-modules",
+          "--doctest-glob", "README.md",
+        ]

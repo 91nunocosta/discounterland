@@ -3,5 +3,5 @@ version: '3'
 services:
   database:
     image: mongo
-    ports: 
+    ports:
       - 27017:27017

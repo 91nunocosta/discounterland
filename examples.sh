@@ -22,4 +22,3 @@ curl --location --request POST 'http://0.0.0.0:5000/consumers/61a2d3be596808c5d6
 --data-raw '{
   "promotion_id": "61a2d5606ac07b74c824f1a9"
 }'
-

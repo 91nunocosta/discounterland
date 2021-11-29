@@ -32,4 +32,3 @@ db.promotions.insert( {
   },
   "discounts_quantity": 10,
 });
-

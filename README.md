@@ -29,12 +29,12 @@ This request returns you the available endpoints.
 
 You can run the script [examples.sh](examples.sh). The script contains some examples of valid requests. You should get success responses to all requests, if no change was made to the database.
 
-If you prefer to use [Postman](https://www.postman.com/), you can import [postman_collection](doc/postman_collection.json) and try the requests there. 
+If you prefer to use [Postman](https://www.postman.com/), you can import [postman_collection](doc/postman_collection.json) and try the requests there.
 
 Once you are done, stop the docker containers running:
 ```
 $ docker-compose down
-``` 
+```
 
 # API
 
@@ -82,7 +82,7 @@ There are some code quality verifications:
 1. unit test
 1. test coverage (in this case configured to 100%).
 
-These verifications are preformed by several tools. [Tox](https://tox.readthedocs.io/en/latest/) is used to automate the entire verification pipeline. You can check which tools are used in the [tox configuration](tox.ini)
+These verifications are preformed by several tools. [pre-commit](https://pre-commit.com/) is used to automate the entire verification pipeline. You can check which tools are used in the [pre-commit configuration](.pre-commit-config.yaml)
 
 To run the code quality verifications in your machine you will need:
 - python3
@@ -102,9 +102,9 @@ Go inside the project:
 $ cd discounterland
 ```
 
-To install `tox` execute:
+To install `pre-commit` execute:
 ```
-$ pip install tox
+$ pip install pre-commit
 ```
 
 To be able to run the tests, an instance of MongoDB is needed. For that run:
@@ -114,7 +114,7 @@ $ docker-compose -f docker-compose-dev.yaml up -d
 
 To execute the verifications, run:
 ```
-$ tox
+$ pre-commit run --all-files
 ```
 
 For stopping the MongoDB instance (and releasing all the docker resources needed for it), run:
